@@ -33,7 +33,7 @@ class FFAppState extends ChangeNotifier {
 
   late SharedPreferences prefs;
 
-  String _chatServerUri = 'http://ha.local';
+  String _chatServerUri = 'ws://ha.local/ws';
   String get chatServerUri => _chatServerUri;
   set chatServerUri(String value) {
     _chatServerUri = value;

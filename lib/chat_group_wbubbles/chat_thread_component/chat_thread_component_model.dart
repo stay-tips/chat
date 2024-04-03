@@ -28,13 +28,9 @@ class ChatThreadComponentModel
   void updateImagesUploadedAtIndex(int index, Function(String) updateFn) =>
       imagesUploaded[index] = updateFn(imagesUploaded[index]);
 
-  dynamic socket;
-
   ///  State fields for stateful widgets in this component.
 
   final formKey = GlobalKey<FormState>();
-  // Stores action output result for [Custom Action - initSocket] action in chat_thread_component widget.
-  dynamic returnedSocket;
   List<ChatMessagesRecord>? listViewPreviousSnapshot;
   // Models for chat_thread_update dynamic component.
   late FlutterFlowDynamicModels<ChatThreadUpdateModel> chatThreadUpdateModels;

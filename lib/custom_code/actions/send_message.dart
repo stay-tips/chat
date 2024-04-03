@@ -11,12 +11,34 @@ import 'package:flutter/material.dart';
 
 import 'package:web_socket_client/web_socket_client.dart';
 
-Future sendMessage(String text, dynamic socket) async {
-  if (socket == null) {
-    print("socket is null");
-    return;
+Future sendMessage(String text, Future Function() uriAction) async {
+  String? uri = FFAppState().chatServerUri;
+  if (uri == null) {
+    debugPrint("uri is null");
+    await uriAction.call();
+    uri = FFAppState().chatServerUri;
+    debugPrint("uri is $uri");
   }
 
+  WebSocket? socket = FFAppState().socket;
+  if (socket == null) {
+    debugPrint("initing socket on uri $uri");
+    //init socket
+    socket = WebSocket(Uri.parse(uri));
+    FFAppState().socket = socket;
+    debugPrint("socket initialized");
+
+    // Listen to changes in the connection state.
+    socket.connection.listen((state) {
+      // Handle changes in the connection state.
+      debugPrint("state: $state");
+    });
+
+    socket.messages.listen((message) {
+      // Handle incoming messages.
+      debugPrint("message: $message");
+    });
+  }
   await socket.connection.firstWhere((state) => state is Connected);
-  socket.send(jsonEncode({"text": 'ciao come ti chiami?'}));
+  socket.send('{"text": "$text"}');
 }
