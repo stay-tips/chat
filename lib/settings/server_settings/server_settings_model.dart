@@ -13,9 +13,9 @@ class ServerSettingsModel extends FlutterFlowModel<ServerSettingsWidget> {
   final formKey = GlobalKey<FormState>();
   // State field(s) for url widget.
   FocusNode? urlFocusNode;
-  TextEditingController? urlController;
-  String? Function(BuildContext, String?)? urlControllerValidator;
-  String? _urlControllerValidator(BuildContext context, String? val) {
+  TextEditingController? urlTextController;
+  String? Function(BuildContext, String?)? urlTextControllerValidator;
+  String? _urlTextControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Please enter full server url .';
     }
@@ -31,13 +31,13 @@ class ServerSettingsModel extends FlutterFlowModel<ServerSettingsWidget> {
 
   @override
   void initState(BuildContext context) {
-    urlControllerValidator = _urlControllerValidator;
+    urlTextControllerValidator = _urlTextControllerValidator;
   }
 
   @override
   void dispose() {
     unfocusNode.dispose();
     urlFocusNode?.dispose();
-    urlController?.dispose();
+    urlTextController?.dispose();
   }
 }

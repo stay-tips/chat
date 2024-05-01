@@ -23,7 +23,7 @@ class _ServerSettingsWidgetState extends State<ServerSettingsWidget> {
     super.initState();
     _model = createModel(context, () => ServerSettingsModel());
 
-    _model.urlController ??= TextEditingController();
+    _model.urlTextController ??= TextEditingController();
     _model.urlFocusNode ??= FocusNode();
     _model.urlFocusNode!.addListener(() => setState(() {}));
   }
@@ -128,7 +128,7 @@ class _ServerSettingsWidgetState extends State<ServerSettingsWidget> {
                                         ),
                                   ),
                                   TextFormField(
-                                    controller: _model.urlController,
+                                    controller: _model.urlTextController,
                                     focusNode: _model.urlFocusNode,
                                     autofocus: true,
                                     textCapitalization:
@@ -212,10 +212,9 @@ class _ServerSettingsWidgetState extends State<ServerSettingsWidget> {
                                           fontFamily: 'Inter',
                                           letterSpacing: 0.0,
                                         ),
-                                    minLines: null,
                                     cursorColor:
                                         FlutterFlowTheme.of(context).primary,
-                                    validator: _model.urlControllerValidator
+                                    validator: _model.urlTextControllerValidator
                                         .asValidator(context),
                                   ),
                                 ]
@@ -232,11 +231,11 @@ class _ServerSettingsWidgetState extends State<ServerSettingsWidget> {
                                 () => _model.switchListTileValue = newValue);
                             if (newValue) {
                               setState(() {
-                                FFAppState().messagesOnDb = true;
+                                FFAppState().storeMessages = true;
                               });
                             } else {
                               setState(() {
-                                FFAppState().messagesOnDb = false;
+                                FFAppState().storeMessages = false;
                               });
                             }
                           },
@@ -287,7 +286,7 @@ class _ServerSettingsWidgetState extends State<ServerSettingsWidget> {
                         if (_model.isVerified == true) {
                           setState(() {
                             FFAppState().chatServerUri =
-                                _model.urlController.text;
+                                _model.urlTextController.text;
                           });
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

@@ -22,7 +22,7 @@ class FFAppState extends ChangeNotifier {
       _chatServerUri = prefs.getString('ff_chatServerUri') ?? _chatServerUri;
     });
     _safeInit(() {
-      _messagesOnDb = prefs.getBool('ff_messagesOnDb') ?? _messagesOnDb;
+      _storeMessages = prefs.getBool('ff_storeMessages') ?? _storeMessages;
     });
   }
 
@@ -40,11 +40,11 @@ class FFAppState extends ChangeNotifier {
     prefs.setString('ff_chatServerUri', value);
   }
 
-  bool _messagesOnDb = false;
-  bool get messagesOnDb => _messagesOnDb;
-  set messagesOnDb(bool value) {
-    _messagesOnDb = value;
-    prefs.setBool('ff_messagesOnDb', value);
+  bool _storeMessages = false;
+  bool get storeMessages => _storeMessages;
+  set storeMessages(bool value) {
+    _storeMessages = value;
+    prefs.setBool('ff_storeMessages', value);
   }
 
   dynamic _socket;
