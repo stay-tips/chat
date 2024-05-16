@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'flutter_flow/request_manager.dart';
 import '/backend/backend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'flutter_flow/flutter_flow_util.dart';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -23,6 +24,21 @@ class FFAppState extends ChangeNotifier {
     });
     _safeInit(() {
       _storeMessages = prefs.getBool('ff_storeMessages') ?? _storeMessages;
+    });
+    _safeInit(() {
+      _messages = prefs
+              .getStringList('ff_messages')
+              ?.map((x) {
+                try {
+                  return MessageStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _messages;
     });
   }
 
@@ -51,6 +67,47 @@ class FFAppState extends ChangeNotifier {
   dynamic get socket => _socket;
   set socket(dynamic value) {
     _socket = value;
+  }
+
+  List<MessageStruct> _messages = [];
+  List<MessageStruct> get messages => _messages;
+  set messages(List<MessageStruct> value) {
+    _messages = value;
+    prefs.setStringList(
+        'ff_messages', value.map((x) => x.serialize()).toList());
+  }
+
+  void addToMessages(MessageStruct value) {
+    _messages.add(value);
+    prefs.setStringList(
+        'ff_messages', _messages.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromMessages(MessageStruct value) {
+    _messages.remove(value);
+    prefs.setStringList(
+        'ff_messages', _messages.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromMessages(int index) {
+    _messages.removeAt(index);
+    prefs.setStringList(
+        'ff_messages', _messages.map((x) => x.serialize()).toList());
+  }
+
+  void updateMessagesAtIndex(
+    int index,
+    MessageStruct Function(MessageStruct) updateFn,
+  ) {
+    _messages[index] = updateFn(_messages[index]);
+    prefs.setStringList(
+        'ff_messages', _messages.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInMessages(int index, MessageStruct value) {
+    _messages.insert(index, value);
+    prefs.setStringList(
+        'ff_messages', _messages.map((x) => x.serialize()).toList());
   }
 
   final _userDocQueryManager = FutureRequestManager<UsersRecord>();

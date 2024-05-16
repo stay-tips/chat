@@ -3,17 +3,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '/backend/schema/util/firestore_util.dart';
+import '/backend/schema/util/schema_util.dart';
 import '/backend/schema/enums/enums.dart';
 
+import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class MessageStruct extends FFFirebaseStruct {
   MessageStruct({
     String? content,
     MessageType? type,
+    DocumentReference? owner,
+    String? image,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _content = content,
         _type = type,
+        _owner = owner,
+        _image = image,
         super(firestoreUtilData);
 
   // "content" field.
@@ -28,9 +34,23 @@ class MessageStruct extends FFFirebaseStruct {
   set type(MessageType? val) => _type = val;
   bool hasType() => _type != null;
 
+  // "owner" field.
+  DocumentReference? _owner;
+  DocumentReference? get owner => _owner;
+  set owner(DocumentReference? val) => _owner = val;
+  bool hasOwner() => _owner != null;
+
+  // "image" field.
+  String? _image;
+  String get image => _image ?? '';
+  set image(String? val) => _image = val;
+  bool hasImage() => _image != null;
+
   static MessageStruct fromMap(Map<String, dynamic> data) => MessageStruct(
         content: data['content'] as String?,
         type: deserializeEnum<MessageType>(data['type']),
+        owner: data['owner'] as DocumentReference?,
+        image: data['image'] as String?,
       );
 
   static MessageStruct? maybeFromMap(dynamic data) =>
@@ -39,6 +59,8 @@ class MessageStruct extends FFFirebaseStruct {
   Map<String, dynamic> toMap() => {
         'content': _content,
         'type': _type?.serialize(),
+        'owner': _owner,
+        'image': _image,
       }.withoutNulls;
 
   @override
@@ -50,6 +72,14 @@ class MessageStruct extends FFFirebaseStruct {
         'type': serializeParam(
           _type,
           ParamType.Enum,
+        ),
+        'owner': serializeParam(
+          _owner,
+          ParamType.DocumentReference,
+        ),
+        'image': serializeParam(
+          _image,
+          ParamType.String,
         ),
       }.withoutNulls;
 
@@ -65,6 +95,17 @@ class MessageStruct extends FFFirebaseStruct {
           ParamType.Enum,
           false,
         ),
+        owner: deserializeParam(
+          data['owner'],
+          ParamType.DocumentReference,
+          false,
+          collectionNamePath: ['users'],
+        ),
+        image: deserializeParam(
+          data['image'],
+          ParamType.String,
+          false,
+        ),
       );
 
   @override
@@ -74,16 +115,20 @@ class MessageStruct extends FFFirebaseStruct {
   bool operator ==(Object other) {
     return other is MessageStruct &&
         content == other.content &&
-        type == other.type;
+        type == other.type &&
+        owner == other.owner &&
+        image == other.image;
   }
 
   @override
-  int get hashCode => const ListEquality().hash([content, type]);
+  int get hashCode => const ListEquality().hash([content, type, owner, image]);
 }
 
 MessageStruct createMessageStruct({
   String? content,
   MessageType? type,
+  DocumentReference? owner,
+  String? image,
   Map<String, dynamic> fieldValues = const {},
   bool clearUnsetFields = true,
   bool create = false,
@@ -92,6 +137,8 @@ MessageStruct createMessageStruct({
     MessageStruct(
       content: content,
       type: type,
+      owner: owner,
+      image: image,
       firestoreUtilData: FirestoreUtilData(
         clearUnsetFields: clearUnsetFields,
         create: create,
