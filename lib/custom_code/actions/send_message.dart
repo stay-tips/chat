@@ -18,5 +18,6 @@ Future sendMessage(String text, dynamic socket) async {
   }
 
   await socket.connection.firstWhere((state) => state is Connected);
-  socket.send(jsonEncode({"text": 'ciao come ti chiami?'}));
+  await socket.send(jsonEncode({"text": 'ciao come ti chiami?'}));
+  debugPrint("message sent");
 }
